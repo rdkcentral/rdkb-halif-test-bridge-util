@@ -15,7 +15,7 @@
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
- 
+
 /**
 * @file test_bridge_util_hal.c
 * @page bridge_util_hal Level 1 Tests
@@ -52,11 +52,11 @@
 * | :--------: | ----------- | ---------- | ----------  | --------- |
 * | 01 | Invoking HandlePreConfigVendor with valid BridgeInfo pointer and all possible instance numbers | bridgeInfo = valid pointer, valid instance number| 0 | Should be successful |
 */
-void test_l1_bridge_util_hal_positive1_HandlePreConfigVendor(void) 
+void test_l1_bridge_util_hal_positive1_HandlePreConfigVendor(void)
 {
     UT_LOG("Entering test_l1_bridge_util_hal_positive1_HandlePreConfigVendor...");
     int result = 0;
-    bridgeDetails *bridgeInfo = (bridgeDetails *)malloc(sizeof(bridgeDetails));   
+    bridgeDetails *bridgeInfo = (bridgeDetails *)malloc(sizeof(bridgeDetails));
     int InstanceNumber = 1;
     if (bridgeInfo != NULL)
     {
@@ -83,7 +83,7 @@ void test_l1_bridge_util_hal_positive1_HandlePreConfigVendor(void)
         UT_LOG("Malloc operation failed");
         UT_FAIL("Memory allocation with malloc failed");
     }
-    
+
     UT_LOG("Exiting test_l1_bridge_util_hal_positive1_HandlePreConfigVendor...");
 }
 
@@ -105,18 +105,18 @@ void test_l1_bridge_util_hal_positive1_HandlePreConfigVendor(void)
 * | :----: | --------- | ---------- | -------------- | ----- |
 * | 01 | Invoke HandlePreConfigVendor with NULL bridgeInfo | bridgeInfo = NULL, valid InstanceNumber | -1 | Should be unsuccessful |
 */
-void test_l1_bridge_util_hal_negative1_HandlePreConfigVendor(void) 
+void test_l1_bridge_util_hal_negative1_HandlePreConfigVendor(void)
 {
     UT_LOG("Entering test_l1_bridge_util_hal_negative1_HandlePreConfigVendor...");
     int result = 0;
-    bridgeDetails *bridgeInfo = NULL;  
-    int InstanceNumber = 1;  
+    bridgeDetails *bridgeInfo = NULL;
+    int InstanceNumber = 1;
 
     UT_LOG("Invoking HandlePreConfigVendor with NULL bridgeInfo");
     result = HandlePreConfigVendor(bridgeInfo, InstanceNumber);
-    UT_LOG("HandlePreConfigVendor returns : %d", result);    
+    UT_LOG("HandlePreConfigVendor returns : %d", result);
     UT_ASSERT_EQUAL(result, -1);
-    
+
     UT_LOG("Exiting test_l1_bridge_util_hal_negative1_HandlePreConfigVendor...");
 }
 /**
@@ -137,18 +137,18 @@ void test_l1_bridge_util_hal_negative1_HandlePreConfigVendor(void)
 * | :----: | --------- | ---------- | -------------- | ----- |
 * | 01 | Invoke HandlePreConfigVendor with minimum out of range Instance number | bridgeInfo = valid pointer, InstanceNumber = 0 | -1 | Should be unsuccessful |
 */
-void test_l1_bridge_util_hal_negative2_HandlePreConfigVendor(void) 
+void test_l1_bridge_util_hal_negative2_HandlePreConfigVendor(void)
 {
     UT_LOG("Entering test_l1_bridge_util_hal_negative2_HandlePreConfigVendor...");
     int result = 0;
-    bridgeDetails *bridgeInfo = (bridgeDetails *)malloc(sizeof(bridgeDetails));   
+    bridgeDetails *bridgeInfo = (bridgeDetails *)malloc(sizeof(bridgeDetails));
     int InstanceNumber = 0;
     if (bridgeInfo != NULL)
-    {    
+    {
         memset(bridgeInfo, 0, sizeof(bridgeDetails));
         UT_LOG("Invoking HandlePreConfigVendor with minimum out of range Instance number : %d", InstanceNumber);
         result = HandlePreConfigVendor(bridgeInfo, InstanceNumber);
-        UT_LOG("HandlePreConfigVendor returns : %d", result);    
+        UT_LOG("HandlePreConfigVendor returns : %d", result);
         UT_ASSERT_EQUAL(result, -1);
 
         free(bridgeInfo);
@@ -159,7 +159,7 @@ void test_l1_bridge_util_hal_negative2_HandlePreConfigVendor(void)
         UT_LOG("Malloc operation failed");
         UT_FAIL("Memory allocation with malloc failed");
     }
-    
+
     UT_LOG("Exiting test_l1_bridge_util_hal_negative2_HandlePreConfigVendor...");
 }
 
@@ -171,28 +171,28 @@ void test_l1_bridge_util_hal_negative2_HandlePreConfigVendor(void)
 * **Test Group ID:** Basic: 01 @n
 * **Test Case ID:** 004 @n
 * **Priority:** High @n@n
-* 
+*
 * **Pre-Conditions:** None @n
 * **Dependencies:** None @n
 * **User Interaction:** If user chooses to run the test in interactive mode, then the test case has to be selected via console. @n
-* 
+*
 * **Test Procedure:** @n
 * | Variation / Step | Description | Test Data | Expected Result | Notes |
 * | :----: | --------- | ---------- |-------------- | ------- |
 * | 01 | Invoke HandlePreConfigVendor with maximum out of range Instance number| bridgeInfo = valid pointer, InstanceNumber = 15 | -1 | Should be unsuccessful |
 */
-void test_l1_bridge_util_hal_negative3_HandlePreConfigVendor(void) 
+void test_l1_bridge_util_hal_negative3_HandlePreConfigVendor(void)
 {
     UT_LOG("Entering test_l1_bridge_util_hal_negative3_HandlePreConfigVendor...");
     int result = 0;
-    bridgeDetails *bridgeInfo = (bridgeDetails *)malloc(sizeof(bridgeDetails));   
+    bridgeDetails *bridgeInfo = (bridgeDetails *)malloc(sizeof(bridgeDetails));
     int InstanceNumber = 15;
     if (bridgeInfo != NULL)
-    {  
-        memset(bridgeInfo, 0, sizeof(bridgeDetails));  
+    {
+        memset(bridgeInfo, 0, sizeof(bridgeDetails));
         UT_LOG("Invoking HandlePreConfigVendor with maximum out of range Instance number: %d", InstanceNumber);
         result = HandlePreConfigVendor(bridgeInfo, InstanceNumber);
-        UT_LOG("HandlePreConfigVendor returns : %d", result);    
+        UT_LOG("HandlePreConfigVendor returns : %d", result);
         UT_ASSERT_EQUAL(result, -1);
 
         free(bridgeInfo);
@@ -203,7 +203,7 @@ void test_l1_bridge_util_hal_negative3_HandlePreConfigVendor(void)
         UT_LOG("Malloc operation failed");
         UT_FAIL("Memory allocation with malloc failed");
     }
-    
+
     UT_LOG("Exiting test_l1_bridge_util_hal_negative3_HandlePreConfigVendor...");
 }
 
@@ -225,18 +225,18 @@ void test_l1_bridge_util_hal_negative3_HandlePreConfigVendor(void)
 * | :----: | --------- | ---------- |-------------- | ----- |
 * | 01 | Invoking HandlePreConfigVendor with missing enum value | bridgeInfo = valid pointer, configValue = 5 | -1 | Should be unsuccessful  |
 */
-void test_l1_bridge_util_hal_negative4_HandlePreConfigVendor(void) 
+void test_l1_bridge_util_hal_negative4_HandlePreConfigVendor(void)
 {
     UT_LOG("Entering test_l1_bridge_util_hal_negative4_HandlePreConfigVendor...");
     int result = 0;
-    bridgeDetails *bridgeInfo = (bridgeDetails *)malloc(sizeof(bridgeDetails));   
+    bridgeDetails *bridgeInfo = (bridgeDetails *)malloc(sizeof(bridgeDetails));
     int InstanceNumber = 5;
     if (bridgeInfo != NULL)
-    { 
-        memset(bridgeInfo, 0, sizeof(bridgeDetails));   
+    {
+        memset(bridgeInfo, 0, sizeof(bridgeDetails));
         UT_LOG("Invoking HandlePreConfigVendor with missing enum value in Instance number : %d ", InstanceNumber);
         result = HandlePreConfigVendor(bridgeInfo, InstanceNumber);
-        UT_LOG("HandlePreConfigVendor returns : %d", result);    
+        UT_LOG("HandlePreConfigVendor returns : %d", result);
         UT_ASSERT_EQUAL(result, -1);
 
         free(bridgeInfo);
@@ -247,7 +247,7 @@ void test_l1_bridge_util_hal_negative4_HandlePreConfigVendor(void)
         UT_LOG("Malloc operation failed");
         UT_FAIL("Memory allocation with malloc failed");
     }
-        
+
     UT_LOG("Exiting test_l1_bridge_util_hal_negative4_HandlePreConfigVendor...");
 }
 
@@ -269,11 +269,11 @@ void test_l1_bridge_util_hal_negative4_HandlePreConfigVendor(void)
 * | :--------: | ----------- | ---------- | ----------  | --------- |
 * | 01 | Invoking HandlePostConfigVendor with valid BridgeInfo pointer and all possible instance number | bridgeInfo = valid pointer, valid instance number| 0 | Should be successful |
 */
-void test_l1_bridge_util_hal_positive1_HandlePostConfigVendor(void) 
+void test_l1_bridge_util_hal_positive1_HandlePostConfigVendor(void)
 {
     UT_LOG("Entering test_l1_bridge_util_hal_positive1_HandlePostConfigVendor...");
     int result = 0;
-    bridgeDetails *bridgeInfo = (bridgeDetails *)malloc(sizeof(bridgeDetails));   
+    bridgeDetails *bridgeInfo = (bridgeDetails *)malloc(sizeof(bridgeDetails));
     int InstanceNumber = 1;
     if (bridgeInfo != NULL)
     {
@@ -300,7 +300,7 @@ void test_l1_bridge_util_hal_positive1_HandlePostConfigVendor(void)
         UT_LOG("Malloc operation failed");
         UT_FAIL("Memory allocation with malloc failed");
     }
-    
+
     UT_LOG("Exiting test_l1_bridge_util_hal_positive1_HandlePostConfigVendor...");
 }
 
@@ -322,18 +322,18 @@ void test_l1_bridge_util_hal_positive1_HandlePostConfigVendor(void)
 * | :----: | --------- | ---------- | -------------- | ----- |
 * | 01 | Invoke HandlePostConfigVendor with NULL bridgeInfo | bridgeInfo = NULL, valid InstanceNumber | -1 | Should be unsuccessful |
 */
-void test_l1_bridge_util_hal_negative1_HandlePostConfigVendor(void) 
+void test_l1_bridge_util_hal_negative1_HandlePostConfigVendor(void)
 {
     UT_LOG("Entering test_l1_bridge_util_hal_negative1_HandlePostConfigVendor...");
     int result = 0;
-    bridgeDetails *bridgeInfo = NULL;  
-    int InstanceNumber = 1;  
+    bridgeDetails *bridgeInfo = NULL;
+    int InstanceNumber = 1;
 
     UT_LOG("Invoking HandlePostConfigVendor with NULL bridgeInfo");
     result = HandlePostConfigVendor(bridgeInfo, InstanceNumber);
-    UT_LOG("HandlePostConfigVendor returns : %d", result);    
+    UT_LOG("HandlePostConfigVendor returns : %d", result);
     UT_ASSERT_EQUAL(result, -1);
-    
+
     UT_LOG("Exiting test_l1_bridge_util_hal_negative1_HandlePostConfigVendor...");
 }
 
@@ -355,18 +355,18 @@ void test_l1_bridge_util_hal_negative1_HandlePostConfigVendor(void)
 * | :----: | --------- | ---------- | -------------- | ----- |
 * | 01 | Invoke HandlePostConfigVendor with minimum out of range Instance number | bridgeInfo = valid pointer, InstanceNumber = 0 | -1 | Should be unsuccessful |
 */
-void test_l1_bridge_util_hal_negative2_HandlePostConfigVendor(void) 
+void test_l1_bridge_util_hal_negative2_HandlePostConfigVendor(void)
 {
     UT_LOG("Entering test_l1_bridge_util_hal_negative2_HandlePostConfigVendor...");
     int result = 0;
-    bridgeDetails *bridgeInfo = (bridgeDetails *)malloc(sizeof(bridgeDetails));   
+    bridgeDetails *bridgeInfo = (bridgeDetails *)malloc(sizeof(bridgeDetails));
     int InstanceNumber = 0;
     if (bridgeInfo != NULL)
-    {  
-        memset(bridgeInfo, 0, sizeof(bridgeDetails));  
+    {
+        memset(bridgeInfo, 0, sizeof(bridgeDetails));
         UT_LOG("Invoking HandlePostConfigVendor with minimum out of range Instance number : %d ", InstanceNumber);
         result = HandlePostConfigVendor(bridgeInfo, InstanceNumber);
-        UT_LOG("HandlePostConfigVendor returns : %d", result);    
+        UT_LOG("HandlePostConfigVendor returns : %d", result);
         UT_ASSERT_EQUAL(result, -1);
 
         free(bridgeInfo);
@@ -377,7 +377,7 @@ void test_l1_bridge_util_hal_negative2_HandlePostConfigVendor(void)
         UT_LOG("Malloc operation failed");
         UT_FAIL("Memory allocation with malloc failed");
     }
-    
+
     UT_LOG("Exiting test_l1_bridge_util_hal_negative2_HandlePostConfigVendor...");
 }
 
@@ -389,28 +389,28 @@ void test_l1_bridge_util_hal_negative2_HandlePostConfigVendor(void)
 * **Test Group ID:** Basic: 01 @n
 * **Test Case ID:** 009 @n
 * **Priority:** High @n@n
-* 
+*
 * **Pre-Conditions:** None @n
 * **Dependencies:** None @n
 * **User Interaction:** If user chooses to run the test in interactive mode, then the test case has to be selected via console. @n
-* 
+*
 * **Test Procedure:** @n
 * | Variation / Step | Description | Test Data | Expected Result | Notes |
 * | :----: | --------- | ---------- |-------------- | ------- |
 * | 01 | Invoke HandlePostConfigVendor with maximum out of range Instance number| bridgeInfo = valid pointer, InstanceNumber = 15 | -1 | Should be unsuccessful |
 */
-void test_l1_bridge_util_hal_negative3_HandlePostConfigVendor(void) 
+void test_l1_bridge_util_hal_negative3_HandlePostConfigVendor(void)
 {
     UT_LOG("Entering test_l1_bridge_util_hal_negative3_HandlePostConfigVendor...");
     int result = 0;
-    bridgeDetails *bridgeInfo = (bridgeDetails *)malloc(sizeof(bridgeDetails));   
+    bridgeDetails *bridgeInfo = (bridgeDetails *)malloc(sizeof(bridgeDetails));
     int InstanceNumber = 15;
     if (bridgeInfo != NULL)
-    {    
+    {
         memset(bridgeInfo, 0, sizeof(bridgeDetails));
         UT_LOG("Invoking HandlePostConfigVendor with maximum out of range Instance number : %d ", InstanceNumber);
         result = HandlePostConfigVendor(bridgeInfo, InstanceNumber);
-        UT_LOG("HandlePostConfigVendor returns : %d", result);    
+        UT_LOG("HandlePostConfigVendor returns : %d", result);
         UT_ASSERT_EQUAL(result, -1);
 
         free(bridgeInfo);
@@ -421,7 +421,7 @@ void test_l1_bridge_util_hal_negative3_HandlePostConfigVendor(void)
         UT_LOG("Malloc operation failed");
         UT_FAIL("Memory allocation with malloc failed");
     }
-    
+
     UT_LOG("Exiting test_l1_bridge_util_hal_negative3_HandlePostConfigVendor...");
 }
 
@@ -443,18 +443,18 @@ void test_l1_bridge_util_hal_negative3_HandlePostConfigVendor(void)
 * | :----: | --------- | ---------- |-------------- | ----- |
 * | 01 | Invoking HandlePostConfigVendor with missing enum value 5 | bridgeInfo = valid pointer, InstanceNumber = 5 | -1 | Should be unsuccessful |
 */
-void test_l1_bridge_util_hal_negative4_HandlePostConfigVendor(void) 
+void test_l1_bridge_util_hal_negative4_HandlePostConfigVendor(void)
 {
     UT_LOG("Entering test_l1_bridge_util_hal_negative4_HandlePostConfigVendor...");
     int result = 0;
-    bridgeDetails *bridgeInfo = (bridgeDetails *)malloc(sizeof(bridgeDetails));   
+    bridgeDetails *bridgeInfo = (bridgeDetails *)malloc(sizeof(bridgeDetails));
     int InstanceNumber = 5;
     if (bridgeInfo != NULL)
-    { 
-        memset(bridgeInfo, 0, sizeof(bridgeDetails));   
+    {
+        memset(bridgeInfo, 0, sizeof(bridgeDetails));
         UT_LOG("Invoking HandlePostConfigVendor with missing enum value in Instance number : %d", InstanceNumber);
         result = HandlePostConfigVendor(bridgeInfo, InstanceNumber);
-        UT_LOG("HandlePostConfigVendor returns : %d", result);    
+        UT_LOG("HandlePostConfigVendor returns : %d", result);
         UT_ASSERT_EQUAL(result, -1);
 
         free(bridgeInfo);
@@ -465,7 +465,7 @@ void test_l1_bridge_util_hal_negative4_HandlePostConfigVendor(void)
         UT_LOG("Malloc operation failed");
         UT_FAIL("Memory allocation with malloc failed");
     }
-        
+
     UT_LOG("Exiting test_l1_bridge_util_hal_negative4_HandlePostConfigVendor...");
 }
 
@@ -487,15 +487,15 @@ void test_l1_bridge_util_hal_negative4_HandlePostConfigVendor(void)
 * | :----: | --------- | ---------- |-------------- | ----- |
 * | 01 | Invoke getVendorIfaces() that provides vendor interface list| None | Non-NULL character array or NULL | Should return Interface list or NULL |
 */
-void test_l1_bridge_util_hal_positive1_getVendorIfaces(void) 
+void test_l1_bridge_util_hal_positive1_getVendorIfaces(void)
 {
     UT_LOG("Entering test_l1_bridge_util_hal_positive1_getVendorIfaces...");
-    char vendorIfaces[64] =  {"\0"}; 
+    char vendorIfaces[64] =  {"\0"};
 
     UT_LOG("Invoking getVendorIfaces API");
     char *result = getVendorIfaces();
-    
-    if (result != NULL) 
+
+    if (result != NULL)
     {
         if (strlen(result) < sizeof(vendorIfaces))
         {
@@ -508,10 +508,10 @@ void test_l1_bridge_util_hal_positive1_getVendorIfaces(void)
         }
     }
     else
-    { 
+    {
         UT_LOG("Vendor Interface is NULL");
     }
-    
+
     UT_PASS("getVendorIfaces validation success");
     UT_LOG("Exiting test_l1_bridge_util_hal_positive1_getVendorIfaces...");
 }
