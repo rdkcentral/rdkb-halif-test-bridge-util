@@ -223,7 +223,7 @@ void test_l1_bridge_util_hal_negative3_HandlePreConfigVendor(void)
 * **Test Procedure:** @n
 * | Variation / Step | Description | Test Data | Expected Result | Notes |
 * | :----: | --------- | ---------- |-------------- | ----- |
-* | 01 | Invoking HandlePreConfigVendor with missing enum value | bridgeInfo = valid pointer, configValue = 5 | -1 | Should be unsuccessful  |
+* | 01 | Invoking HandlePreConfigVendor with missing enum value | bridgeInfo = valid pointer, InstanceNumber = 5 | -1 | Should be unsuccessful  |
 */
 void test_l1_bridge_util_hal_negative4_HandlePreConfigVendor(void)
 {
