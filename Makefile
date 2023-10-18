@@ -16,6 +16,7 @@
 # * See the License for the specific language governing permissions and
 # * limitations under the License.
 # *
+
 ROOT_DIR:=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 BIN_DIR := $(ROOT_DIR)/bin
 TOP_DIR := $(ROOT_DIR)
@@ -35,7 +36,7 @@ $(info TARGET [$(TARGET)])
 
 HAL_LIB_DIR := $(ROOT_DIR)/libs
 ifeq ($(TARGET),arm)
-YLDFLAGS = -Wl,-rpath,$(HAL_LIB_DIR) -L$(HAL_LIB_DIR) -lbridge_utils
+YLDFLAGS = -Wl,-rpath,$(HAL_LIB_DIR) -L$(HAL_LIB_DIR) -lbridge_utils -lbridgeutils
 endif
 
 .PHONY: clean list all
