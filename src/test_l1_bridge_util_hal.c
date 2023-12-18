@@ -17,7 +17,7 @@
 */
 
 /**
-* @file test_bridge_util_hal.c
+* @file test_l1_bridge_util_hal.c
 * @page bridge_util_hal Level 1 Tests
 *
 * ## Module's Role
@@ -35,24 +35,29 @@
 #include "bridge_util_hal.h"
 #include "cJSON.h"
 
-char ifaceName[64] = {0};
-char bridgeName[64] = {0};
-char interfaceList[64] = {0};
+char ifaceName[64] = { '\0' };
+char bridgeName[64] = { '\0' };
+char interfaceList[64] = { '\0' };
 
 /**function to read the json config file and return its content as a string
 *IN : json file name
 *OUT : content of json file as string
 **/
-static char* read_file(const char *filename) 
+static char* read_file(const char *filename)
 {
     FILE *file = NULL;
     long length = 0;
     char *content = NULL;
     size_t read_chars = 0;
-    UT_LOG("Entered the read file");
-    /* open in read binary mode */
-    file = fopen(filename, "rb");
-    if (file != NULL)
+
+    /* open in read mode */
+    file = fopen(filename, "r");
+    if (file == NULL)
+    {
+        printf("Please place bridge_util_config file ,where your binary is placed\n");
+        exit(1);
+    }
+    else
     {
         /* get the length */
         if (fseek(file, 0, SEEK_END) == 0)
@@ -78,16 +83,20 @@ static char* read_file(const char *filename)
                     }
                 }
             }
+            else
+            {
+                printf("bridge_util_config file is empty. please add configuration\n");
+                exit(1);
+            }
         }
+        fclose(file);
     }
-    UT_LOG("Entered the read file");
-    fclose(file);
     return content;
 }
 
 /**function to read the json config file and return its content as a json object
-*IN : json file name
-*OUT : content of json file as a json object
+* IN : json file name
+* OUT : content of json file as a json object
 **/
 static cJSON *parse_file(const char *filename)
 {
@@ -95,7 +104,7 @@ static cJSON *parse_file(const char *filename)
     UT_LOG("Entered  parse_file");
     char *content = read_file(filename);
     parsed = cJSON_Parse(content);
-    UT_LOG("After cJSON_Parse called"); 
+    UT_LOG("After cJSON_Parse called");
     if(content != NULL)
     {
         free(content);
@@ -107,7 +116,7 @@ static cJSON *parse_file(const char *filename)
 /* get the ifaceName from configuration file */
 int get_ifaceName(void)
 {
-    char configFile[] =  "./bridge_util_config";    
+    char configFile[] =  "./bridge_util_config";
     cJSON *value = NULL;
     cJSON *json = NULL;
     UT_LOG("Checking ifaceName");
@@ -121,7 +130,7 @@ int get_ifaceName(void)
     // null check and object is string, value->valuestring
     if((value != NULL) && (cJSON_IsString(value)))
     {
-       strcpy(ifaceName, value->valuestring);	
+       strcpy(ifaceName, value->valuestring);
     }
     UT_LOG("ifaceName from config file is : %s",ifaceName);
     return 0;
@@ -130,7 +139,7 @@ int get_ifaceName(void)
 /* get the bridgeName from configuration file */
 int get_bridgeName(void)
 {
-    char configFile[] =  "./bridge_util_config";    
+    char configFile[] =  "./bridge_util_config";
     cJSON *value = NULL;
     cJSON *json = NULL;
     UT_LOG("Checking bridgeName");
@@ -144,7 +153,7 @@ int get_bridgeName(void)
     // null check and object is string, value->valuestring
     if((value != NULL) && (cJSON_IsString(value)))
     {
-       strcpy(bridgeName, value->valuestring);	
+       strcpy(bridgeName, value->valuestring);
     }
     UT_LOG("bridgeName from config file is : %s",bridgeName);
     return 0;
@@ -153,7 +162,7 @@ int get_bridgeName(void)
 /* get the interfaceList from configuration file */
 int get_interfaceList(void)
 {
-    char configFile[] =  "./bridge_util_config";    
+    char configFile[] =  "./bridge_util_config";
     cJSON *value = NULL;
     cJSON *json = NULL;
     UT_LOG("Checking interfaceList");
@@ -167,7 +176,7 @@ int get_interfaceList(void)
     // null check and object is string, value->valuestring
     if((value != NULL) && (cJSON_IsString(value)))
     {
-       strcpy(interfaceList, value->valuestring);	
+       strcpy(interfaceList, value->valuestring);
     }
     UT_LOG("interfaceList from config file is : %s",interfaceList);
     return 0;
@@ -242,7 +251,7 @@ void test_l1_bridge_util_hal_positive1_updateBridgeInfo(void)
 * | 03 | Invoke updateBridgeInfo with Opr = 3 | bridgeInfo = valid structure , ifNameToBeUpdated = valid buffer , Opr = 3, type = valid buffer | 0 | Should be successful |
 * | 04 | Invoke updateBridgeInfo with Opr = 4 | bridgeInfo = valid structure , ifNameToBeUpdated = valid buffer , Opr = 4, type = valid buffer | 0 | Should be successful |
 */
-void test_l1_bridge_util_hal_positive2_updateBridgeInfo(void) 
+void test_l1_bridge_util_hal_positive2_updateBridgeInfo(void)
 {
     UT_LOG("Entering test_l1_bridge_util_hal_positive2_updateBridgeInfo...");
     int result = 0;
@@ -252,7 +261,7 @@ void test_l1_bridge_util_hal_positive2_updateBridgeInfo(void)
     int type = IF_BRIDGE_BRIDGEUTIL;
     if (bridgeInfo != NULL)
     {
-        for (Opr = 1; Opr <= 4; Opr++) 
+        for (Opr = 1; Opr <= 4; Opr++)
         {
             memset(bridgeInfo, 0, sizeof(bridgeDetails));
             UT_LOG("Invoking updateBridgeInfo with valid Opr = %d", Opr);
@@ -288,7 +297,6 @@ void test_l1_bridge_util_hal_positive2_updateBridgeInfo(void)
 * **User Interaction:** If the user chooses to run the test in interactive mode, then the test case has to be selected via the console. @n
 *
 * **Test Procedure:** @n
-*
 * | Variation / Step | Description | Test Data | Expected Result | Notes |
 * | :----: | --------- | ---------- | -------------- | ----- |
 * | 01 | Invoke the updateBridgeInfo API with type = 1 | bridgeInfo = valid structure , ifNameToBeUpdated = valid buffer , Opr =valid buffer, type = 1  | 0 | Should be successful |
@@ -299,7 +307,7 @@ void test_l1_bridge_util_hal_positive2_updateBridgeInfo(void)
 * | 06 | Invoke the updateBridgeInfo API with type = 6 | bridgeInfo = valid structure , ifNameToBeUpdated = valid buffer , Opr = valid buffer, type = 6 | 0 | Should be successful |
 * | 07 | Invoke the updateBridgeInfo API with type = 7 | bridgeInfo = valid structure , ifNameToBeUpdated = valid buffer , Opr = valid buffer, type = 7 | 0 | Should be successful |
 */
-void test_l1_bridge_util_hal_positive3_updateBridgeInfo(void) 
+void test_l1_bridge_util_hal_positive3_updateBridgeInfo(void)
 {
     UT_LOG("Entering test_l1_bridge_util_hal_positive3_updateBridgeInfo...");
     int result = 0;
@@ -309,7 +317,7 @@ void test_l1_bridge_util_hal_positive3_updateBridgeInfo(void)
     int type = 1;
     if (bridgeInfo != NULL)
     {
-        for (type = 1; type <= 7; type++) 
+        for (type = 1; type <= 7; type++)
         {
             memset(bridgeInfo, 0, sizeof(bridgeDetails));
             UT_LOG("Invoking updateBridgeInfo with valid type = %d", type);
@@ -354,7 +362,7 @@ void test_l1_bridge_util_hal_negative1_updateBridgeInfo(void)
     UT_LOG("Entering test_l1_bridge_util_hal_negative1_updateBridgeInfo...");
     int result = 0;
     bridgeDetails *bridgeInfo = NULL;
-    char ifNameToBeUpdated[64] =  {"\0"}; 
+    char ifNameToBeUpdated[64] =  {"\0"};
     OVS_CMD Opr = OVS_BRIDGE_IF_TYPE;
     OVS_IF_TYPE type = IF_BRIDGE_BRIDGEUTIL;
 
@@ -394,8 +402,8 @@ void test_l1_bridge_util_hal_negative2_updateBridgeInfo(void)
     OVS_IF_TYPE type = IF_BRIDGE_BRIDGEUTIL;
     if (bridgeInfo != NULL)
     {
-        memset(bridgeInfo, 0, sizeof(bridgeDetails)); 
-        UT_LOG("Invoking updateBridgeInfo with NULL ifNameToBeUpdated.");       
+        memset(bridgeInfo, 0, sizeof(bridgeDetails));
+        UT_LOG("Invoking updateBridgeInfo with NULL ifNameToBeUpdated.");
         result = updateBridgeInfo(bridgeInfo, ifNameToBeUpdated, Opr, type);
         UT_LOG("updateBridgeInfo returns : %d", result);
         UT_ASSERT_EQUAL(result, -1);
@@ -430,7 +438,7 @@ void test_l1_bridge_util_hal_negative2_updateBridgeInfo(void)
 * | :----: | --------- | ---------- |-------------- | ----- |
 * | 01 | Invoke the API with invalid Opr | bridgeInfo = valid structure, ifNameToBeUpdated = valid buffer, invalid Opr, type = valid buffer | -1 | The API should return error |
 */
-void test_l1_bridge_util_hal_negative3_updateBridgeInfo(void) 
+void test_l1_bridge_util_hal_negative3_updateBridgeInfo(void)
 {
     UT_LOG("Entering test_l1_bridge_util_hal_negative3_updateBridgeInfo...");
     int result1 = 0;
@@ -441,11 +449,10 @@ void test_l1_bridge_util_hal_negative3_updateBridgeInfo(void)
     OVS_IF_TYPE type = IF_BRIDGE_BRIDGEUTIL;
     if (bridgeInfo != NULL)
     {
-        memset(bridgeInfo, 0, sizeof(bridgeDetails));       
+        memset(bridgeInfo, 0, sizeof(bridgeDetails));
         UT_LOG("Invoking updateBridgeInfo with invalid minimum Opr : %d ",Opr);
         result1 = updateBridgeInfo(bridgeInfo, ifNameToBeUpdated, Opr, type);
         UT_LOG("updateBridgeInfo returns : %d", result1);
-
 
         Opr = 5;
         UT_LOG("Invoking updateBridgeInfo with invalid maximum Opr : %d ",Opr);
@@ -479,13 +486,13 @@ void test_l1_bridge_util_hal_negative3_updateBridgeInfo(void)
 * **Pre-Conditions:** None @n
 * **Dependencies:** None @n
 * **User Interaction:** If the user chooses to run the test in interactive mode, then the test case has to be selected via console. @n
-* 
+*
 * **Test Procedure:** @n
 * | Variation / Step | Description | Test Data | Expected Result | Notes |
 * | :----: | --------- | ---------- |-------------- | ----- |
 * | 01 | Invoke the updateBridgeInfo API with invalid type | bridgeInfo = valid structure, ifNameToBeUpdated = valid buffer, Opr = valid buffer, invalid type | -1 | Should return error |
 */
-void test_l1_bridge_util_hal_negative4_updateBridgeInfo(void) 
+void test_l1_bridge_util_hal_negative4_updateBridgeInfo(void)
 {
     UT_LOG("Entering test_l1_bridge_util_hal_negative4_updateBridgeInfo...");
     int result1 = 0;
@@ -506,7 +513,7 @@ void test_l1_bridge_util_hal_negative4_updateBridgeInfo(void)
         UT_LOG("Invoking updateBridgeInfo with invalid maximum type : %d",type);
         result2 = updateBridgeInfo(bridgeInfo, ifNameToBeUpdated, Opr, type);
         UT_LOG("updateBridgeInfo returns : %d", result2);
-        
+
         UT_ASSERT_EQUAL(result1, -1);
         UT_ASSERT_EQUAL(result2, -1);
 
@@ -540,7 +547,7 @@ void test_l1_bridge_util_hal_negative4_updateBridgeInfo(void)
 * | :----: | --------- | ---------- |-------------- | ----- |
 * | 01 | Invoke checkIfExists with valid interface | valid interface buffer | 0 | Should return Success |
 */
-void test_l1_bridge_util_hal_positive1_checkIfExists(void) 
+void test_l1_bridge_util_hal_positive1_checkIfExists(void)
 {
     UT_LOG("Entering test_l1_bridge_util_hal_positive1_checkIfExists...");
     int result = 0;
@@ -574,7 +581,7 @@ void test_l1_bridge_util_hal_positive1_checkIfExists(void)
 * | :----: | --------- | ---------- | -------------- | ----- |
 * | 01 | Invoking checkIfExists with NULL interface name | NULL interface name | -1 | Should return error |
 */
-void test_l1_bridge_util_hal_negative1_checkIfExists(void) 
+void test_l1_bridge_util_hal_negative1_checkIfExists(void)
 {
     UT_LOG("Entering test_l1_bridge_util_hal_negative1_checkIfExists...");
     int result = 0;
@@ -606,7 +613,7 @@ void test_l1_bridge_util_hal_negative1_checkIfExists(void)
 * | :----: | --------- | ---------- |-------------- | ----- |
 * | 01 | Invoke checkIfExists with empty interface name | empty interface name | -1 | Should return error |
 */
-void test_l1_bridge_util_hal_negative2_checkIfExists(void) 
+void test_l1_bridge_util_hal_negative2_checkIfExists(void)
 {
     UT_LOG("Entering test_l1_bridge_util_hal_negative2_checkIfExists...");
     int result = 0;
@@ -638,11 +645,11 @@ void test_l1_bridge_util_hal_negative2_checkIfExists(void)
 * | :----: | --------- | ---------- | -------------- | ----- |
 * | 01 | Invoke checkIfExists with invalid interface name | invalid interface name | -1 | Should return error |
 */
-void test_l1_bridge_util_hal_negative3_checkIfExists(void) 
+void test_l1_bridge_util_hal_negative3_checkIfExists(void)
 {
     UT_LOG("Entering test_l1_bridge_util_hal_negative3_checkIfExists...");
     int result = 0;
-    char iface_name[64] = "invalid_interface"; 
+    char iface_name[64] = "invalid_interface";
 
     UT_LOG("Invoking checkIfExists with invalid_interface");
     result = checkIfExists(iface_name);
@@ -670,7 +677,7 @@ void test_l1_bridge_util_hal_negative3_checkIfExists(void)
 * | :----: | --------- | ---------- |-------------- | ----- |
 * | 01 | Invoke checkIfExistsInBridge with valid interface name | valid interface name , valid Bridge name buffer | 0 | Should return Success |
 */
-void test_l1_bridge_util_hal_positive1_checkIfExistsInBridge(void) 
+void test_l1_bridge_util_hal_positive1_checkIfExistsInBridge(void)
 {
     UT_LOG("Entering test_l1_bridge_util_hal_positive1_checkIfExistsInBridge...");
     int result = 0;
@@ -698,21 +705,21 @@ void test_l1_bridge_util_hal_positive1_checkIfExistsInBridge(void)
 * **Test Group ID:** Basic: 01 @n
 * **Test Case ID:** 013 @n
 * **Priority:** High @n@n
-* 
+*
 * **Pre-Conditions:** None @n
 * **Dependencies:** None @n
 * **User Interaction:** If user chose to run the test in interactive mode, then the test case has to be selected via console. @n
-* 
+*
 * **Test Procedure:** @n
 * | Variation / Step | Description | Test Data | Expected Result | Notes |
 * | :----: | --------- | ---------- |-------------- | ----- |
 * | 01 | Invoke checkIfExistsInBridge with valid interface and the interface is not attached to any bridge | valid interface name, valid bridge name buffer | -1 | Should return error |
 */
-void test_l1_bridge_util_hal_negative1_checkIfExistsInBridge(void) 
+void test_l1_bridge_util_hal_negative1_checkIfExistsInBridge(void)
 {
     UT_LOG("Entering test_l1_bridge_util_hal_negative1_checkIfExistsInBridge...");
     int result = 0;
-    char iface_name[64] = "moca1"; 
+    char iface_name[64] = "moca1";
     char bridge_name[64] =  "brlan0";
 
     UT_LOG("Invoking checkIfExistsInBridge with  valid interface:%s not in bridge : %s", iface_name, bridge_name);
@@ -727,22 +734,22 @@ void test_l1_bridge_util_hal_negative1_checkIfExistsInBridge(void)
 /**
 * @brief Test scenario to check if the function returns the correct result when the input interface name is NULL.
 *
-* This test checks if the checkIfExistsInBridge API handles the case where the interface name is NULL 
-* 
+* This test checks if the checkIfExistsInBridge API handles the case where the interface name is NULL
+*
 * **Test Group ID:** Basic: 01 @n
 * **Test Case ID:** 014 @n
 * **Priority:** High @n@n
-* 
+*
 * **Pre-Conditions:** None @n
 * **Dependencies:** None @n
 * **User Interaction:** If user chose to run the test in interactive mode, then the test case has to be selected via console @n
-* 
+*
 * **Test Procedure:** @n
 * | Variation / Step | Description | Test Data | Expected Result | Notes |
 * | :----: | --------- | ---------- |-------------- | ----- |
 * | 01 | Invoke checkIfExistsInBridge with NULL interface | NULL interface name | -1 | Should return error |
 */
-void test_l1_bridge_util_hal_negative2_checkIfExistsInBridge(void) 
+void test_l1_bridge_util_hal_negative2_checkIfExistsInBridge(void)
 {
     UT_LOG("Entering test_l1_bridge_util_hal_negative2_checkIfExistsInBridge...");
     int result = 0;
@@ -778,7 +785,7 @@ void test_l1_bridge_util_hal_negative2_checkIfExistsInBridge(void)
 * | :----: | --------- | ---------- | --------------- | ----- |
 * | 01 | Invoke checkIfExistsInBridge with NULL bridge Name | valid Interface , NULL bridge name | -1 | The function should return error |
 */
-void test_l1_bridge_util_hal_negative3_checkIfExistsInBridge(void) 
+void test_l1_bridge_util_hal_negative3_checkIfExistsInBridge(void)
 {
     UT_LOG("Entering test_l1_bridge_util_hal_negative3_checkIfExistsInBridge...");
     int result = 0;
@@ -846,7 +853,7 @@ void test_l1_bridge_util_hal_negative4_checkIfExistsInBridge(void)
 * | :--------: | --------- | ---------- | ----------| ------- |
 * | 01 | Invoke checkIfExistsInBridge with empty interface name | empty interface name | -1 | Should return error |
 */
-void test_l1_bridge_util_hal_negative5_checkIfExistsInBridge(void) 
+void test_l1_bridge_util_hal_negative5_checkIfExistsInBridge(void)
 {
     UT_LOG("Entering test_l1_bridge_util_hal_negative5_checkIfExistsInBridge...");
     int result = 0;
@@ -948,6 +955,7 @@ void test_l1_bridge_util_hal_negative1_HandlePreConfigVendor(void)
 
     UT_LOG("Exiting test_l1_bridge_util_hal_negative1_HandlePreConfigVendor...");
 }
+
 /**
 * @brief This is a unit test to verify the behavior of the HandlePreConfigVendor function when provided with an out of range Instance number.
 *
@@ -1349,7 +1357,7 @@ void test_l1_bridge_util_hal_positive1_getVendorIfaces(void)
 * @brief This test case tests the functionality of the removeIfaceFromList() function.
 *
 * The objective of this test is to verify that the removeIfaceFromList() function returns the expected string after removing a sub-string from a given string.
-* 
+*
 * **Test Group ID:** Basic : 01  @n
 * **Test Case ID:** 029 @n
 * **Priority:** High @n@n
@@ -1363,15 +1371,15 @@ void test_l1_bridge_util_hal_positive1_getVendorIfaces(void)
 * | :----: | --------- | ---------- |-------------- | ----- |
 * | 01 | Invoke removeIfaceFromList with valid interface name | str = valid buffer , sub = valid buffer| str should not have sub string buffer | Should be successful |
 */
-void test_l1_bridge_util_hal_positive1_removeIfaceFromList()
+void test_l1_bridge_util_hal_positive1_removeIfaceFromList(void)
 {
     UT_LOG("Entering test_l1_bridge_util_hal_positive1_removeIfaceFromList...");
     char str[64] = {"\0"};
     //interfaceList should be configured in bridge_util_config file
-    strcpy(str, interfaceList);   
+    strcpy(str, interfaceList);
     char sub[64] = {"\0"};
     //ifaceName should be configured in bridge_util_config file
-    strcpy(sub, ifaceName);  
+    strcpy(sub, ifaceName);
 
 
     UT_LOG("Invoking removeIfaceFromList() with valid interface name : %s and interface list : %s", sub, str);
@@ -1408,12 +1416,12 @@ void test_l1_bridge_util_hal_positive1_removeIfaceFromList()
 * | :---------: | ----------| ------------- | --------------- | -------- |
 * |  01  | Invoking removeIfaceFromList() with substring as NULL  | sub = NULL | API should handle| Should be successful |
 */
-void test_l1_bridge_util_hal_negative1_removeIfaceFromList()
+void test_l1_bridge_util_hal_negative1_removeIfaceFromList(void)
 {
     UT_LOG("Entering test_l1_bridge_util_hal_negative1_removeIfaceFromList...");
     char str[64] = {"\0"};
     //interfaceList should be configured in bridge_util_config file
-    strcpy(str, interfaceList); 
+    strcpy(str, interfaceList);
     char *sub = NULL;
 
     UT_LOG("Invoking removeIfaceFromList() with NULL substring with interface list : %s ", str);
@@ -1432,23 +1440,23 @@ void test_l1_bridge_util_hal_negative1_removeIfaceFromList()
 * **Test Group ID:** Basic: 01 @n
 * **Test Case ID:** 031 @n
 * **Priority:** High @n@n
-* 
+*
 * **Pre-Conditions:** None @n
 * **Dependencies:** None @n
 * **User Interaction:** If user chose to run the test in interactive mode, then the test case has to be selected via console. @n
-* 
+*
 * **Test Procedure:** @n
 * | Variation / Step | Description | Test Data | Expected Result | Notes |
 * | :--------------: | ----------- | --------- | --------------- | ----- |
 * |  01 | Invoke removeIfaceFromList() with NULL Str | str = NULL, sub = valid buffer| Non-crashing execution | The function should not crash  |
  */
-void test_l1_bridge_util_hal_negative2_removeIfaceFromList()
+void test_l1_bridge_util_hal_negative2_removeIfaceFromList(void)
 {
     UT_LOG("Entering test_l1_bridge_util_hal_negative2_removeIfaceFromList...");
     char *str =  NULL;
     char sub[64] = {"\0"};
     //ifaceName should be configured in bridge_util_config file
-    strcpy(sub, ifaceName); 
+    strcpy(sub, ifaceName);
 
     UT_LOG("Invoking removeIfaceFromList() with NULL Str");
     removeIfaceFromList(str,sub);
@@ -1475,12 +1483,12 @@ void test_l1_bridge_util_hal_negative2_removeIfaceFromList()
 * | :----: | --------- | ---------- |-------------- | ----- |
 * | 01 | Invoking removeIfaceFromList() with an empty sub parameter | empty sub string |Non-crashing execution | The function should not crash |
 */
-void test_l1_bridge_util_hal_negative3_removeIfaceFromList()
+void test_l1_bridge_util_hal_negative3_removeIfaceFromList(void)
 {
     UT_LOG("Entering test_l1_bridge_util_hal_negative3_removeIfaceFromList...");
     char str[64] = {"\0"};
     //interfaceList should be configured in bridge_util_config file
-    strcpy(str, interfaceList); 
+    strcpy(str, interfaceList);
     char sub[64] = "";
 
     UT_LOG("Invoking removeIfaceFromList() with empty substring");
@@ -1509,12 +1517,12 @@ void test_l1_bridge_util_hal_negative3_removeIfaceFromList()
 * | :----: | --------- | ---------- |-------------- | ----- |
 * | 01 | Invoke removeIfaceFromList function with invalid sub | invalid substring | Non-crashing execution | The function should not crash |
 */
-void test_l1_bridge_util_hal_negative4_removeIfaceFromList()
+void test_l1_bridge_util_hal_negative4_removeIfaceFromList(void)
 {
     UT_LOG("Entering test_l1_bridge_util_hal_negative4_removeIfaceFromList...");
     char str[64] = {"\0"};
     //interfaceList should be configured in bridge_util_config file
-    strcpy(str, interfaceList); 
+    strcpy(str, interfaceList);
     char sub[64] = "invalid_iface";
 
     UT_LOG("Invoking removeIfaceFromList() with invalid Interface : %s ", sub);
@@ -1543,7 +1551,7 @@ void test_l1_bridge_util_hal_negative4_removeIfaceFromList()
 * | :----: | --------- | ---------- |-------------- | ----- |
 * | 01 | Invoke removeIfaceFromList function with NULL sub and str| NULL sub and str | Non-crashing execution | The function should not crash |
 */
-void test_l1_bridge_util_hal_negative5_removeIfaceFromList()
+void test_l1_bridge_util_hal_negative5_removeIfaceFromList(void)
 {
     UT_LOG("Entering test_l1_bridge_util_hal_negative5_removeIfaceFromList...");
     char *str = NULL;
@@ -1563,63 +1571,49 @@ static UT_test_suite_t * pSuite = NULL;
 *
 * @return int - 0 on success, otherwise failure
 */
-int register_hal_tests(void)
+int test_bridge_util_hal_l1_register(void)
 {
     // Create the test suite
     pSuite = UT_add_suite("[L1 bridge_util_hal]", NULL, NULL);
-    if (pSuite == NULL) {
+    if (pSuite == NULL)
+    {
         return -1;
     }
-    // List of test function names and strings
-    const char* list1[] = {"l1_bridge_util_hal_positive1_updateBridgeInfo", "l1_bridge_util_hal_positive2_updateBridgeInfo", "l1_bridge_util_hal_positive3_updateBridgeInfo", "l1_bridge_util_hal_negative1_updateBridgeInfo", "l1_bridge_util_hal_negative2_updateBridgeInfo", "l1_bridge_util_hal_negative3_updateBridgeInfo", "l1_bridge_util_hal_negative4_updateBridgeInfo", "l1_bridge_util_hal_positive1_checkIfExists", "l1_bridge_util_hal_negative1_checkIfExists", "l1_bridge_util_hal_negative2_checkIfExists", "l1_bridge_util_hal_negative3_checkIfExists", "l1_bridge_util_hal_positive1_checkIfExistsInBridge", "l1_bridge_util_hal_negative1_checkIfExistsInBridge", "l1_bridge_util_hal_negative2_checkIfExistsInBridge", "l1_bridge_util_hal_negative3_checkIfExistsInBridge", "l1_bridge_util_hal_negative4_checkIfExistsInBridge", "l1_bridge_util_hal_negative5_checkIfExistsInBridge", "l1_bridge_util_hal_positive1_HandlePreConfigVendor", "l1_bridge_util_hal_negative1_HandlePreConfigVendor", "l1_bridge_util_hal_negative2_HandlePreConfigVendor", "l1_bridge_util_hal_negative3_HandlePreConfigVendor", "l1_bridge_util_hal_negative4_HandlePreConfigVendor","l1_bridge_util_hal_positive1_HandlePostConfigVendor","l1_bridge_util_hal_negative1_HandlePostConfigVendor", "l1_bridge_util_hal_negative2_HandlePostConfigVendor","l1_bridge_util_hal_negative3_HandlePostConfigVendor","l1_bridge_util_hal_negative4_HandlePostConfigVendor","l1_bridge_util_hal_positive1_getVendorIfaces","l1_bridge_util_hal_positive1_removeIfaceFromList","l1_bridge_util_hal_negative1_removeIfaceFromList","l1_bridge_util_hal_negative2_removeIfaceFromList","l1_bridge_util_hal_negative3_removeIfaceFromList","l1_bridge_util_hal_negative4_removeIfaceFromList","l1_bridge_util_hal_negative5_removeIfaceFromList"};
-    void (*list2[])() = {test_l1_bridge_util_hal_positive1_updateBridgeInfo, test_l1_bridge_util_hal_positive2_updateBridgeInfo, test_l1_bridge_util_hal_positive3_updateBridgeInfo, test_l1_bridge_util_hal_negative1_updateBridgeInfo, test_l1_bridge_util_hal_negative2_updateBridgeInfo, test_l1_bridge_util_hal_negative3_updateBridgeInfo, test_l1_bridge_util_hal_negative4_updateBridgeInfo, test_l1_bridge_util_hal_positive1_checkIfExists, test_l1_bridge_util_hal_negative1_checkIfExists, test_l1_bridge_util_hal_negative2_checkIfExists, test_l1_bridge_util_hal_negative3_checkIfExists, test_l1_bridge_util_hal_positive1_checkIfExistsInBridge, test_l1_bridge_util_hal_negative1_checkIfExistsInBridge, test_l1_bridge_util_hal_negative2_checkIfExistsInBridge, test_l1_bridge_util_hal_negative3_checkIfExistsInBridge, test_l1_bridge_util_hal_negative4_checkIfExistsInBridge, test_l1_bridge_util_hal_negative5_checkIfExistsInBridge, test_l1_bridge_util_hal_positive1_HandlePreConfigVendor, test_l1_bridge_util_hal_negative1_HandlePreConfigVendor, test_l1_bridge_util_hal_negative2_HandlePreConfigVendor, test_l1_bridge_util_hal_negative3_HandlePreConfigVendor, test_l1_bridge_util_hal_negative4_HandlePreConfigVendor, test_l1_bridge_util_hal_positive1_HandlePostConfigVendor, test_l1_bridge_util_hal_negative1_HandlePreConfigVendor,test_l1_bridge_util_hal_negative2_HandlePostConfigVendor,test_l1_bridge_util_hal_negative3_HandlePostConfigVendor,test_l1_bridge_util_hal_negative4_HandlePostConfigVendor,test_l1_bridge_util_hal_positive1_getVendorIfaces,test_l1_bridge_util_hal_positive1_removeIfaceFromList,test_l1_bridge_util_hal_negative1_removeIfaceFromList, test_l1_bridge_util_hal_negative2_removeIfaceFromList,test_l1_bridge_util_hal_negative3_removeIfaceFromList,test_l1_bridge_util_hal_negative4_removeIfaceFromList,test_l1_bridge_util_hal_negative5_removeIfaceFromList};
-    // Add tests to the suite
-    for (int i = 0; i < sizeof(list1) / sizeof(list1[0]); i++) {
-        UT_add_test(pSuite, list1[i], list2[i]);
-    }
-    return 0;
-}
-int main(int argc, char** argv)
-{
-    int registerReturn = 0;
-    if (get_ifaceName() == 0)
-    {
-        UT_LOG("Got the Interface Name value : %s", ifaceName);
-    }
-    else
-    {
-        printf("Failed to get Interface Name value\n");
-    }
-    if (get_bridgeName() == 0)
-    {
-        UT_LOG("Got the bridge name value : %s", bridgeName);
-    }
-    else
-    {
-        printf("Failed to get bridge name value\n");
-    }
-    if (get_interfaceList() == 0)
-    {
-        UT_LOG("Got the interface List value : %s", interfaceList);
-    }
-    else
-    {
-        printf("Failed to get interface List value\n");
-    }
-    /* Register tests as required, then call the UT-main to support switches and triggering */
-    UT_init( argc, argv );
-    /* Check if tests are registered successfully */
-    registerReturn = register_hal_tests();
-    if (registerReturn == 0)
-    {
-        printf("register_hal_tests() returned success");
-    }
-    else
-    {
-        printf("register_hal_tests() returned failure");
-        return 1;
-    }
-    /* Begin test executions */
-    UT_run_tests();
+
+    UT_add_test( pSuite, "l1_bridge_util_hal_positive1_updateBridgeInfo", test_l1_bridge_util_hal_positive1_updateBridgeInfo);
+    UT_add_test( pSuite, "l1_bridge_util_hal_positive2_updateBridgeInfo", test_l1_bridge_util_hal_positive2_updateBridgeInfo);
+    UT_add_test( pSuite, "l1_bridge_util_hal_positive3_updateBridgeInfo", test_l1_bridge_util_hal_positive3_updateBridgeInfo);
+    UT_add_test( pSuite, "l1_bridge_util_hal_negative1_updateBridgeInfo", test_l1_bridge_util_hal_negative1_updateBridgeInfo);
+    UT_add_test( pSuite, "l1_bridge_util_hal_negative2_updateBridgeInfo", test_l1_bridge_util_hal_negative2_updateBridgeInfo);
+    UT_add_test( pSuite, "l1_bridge_util_hal_negative3_updateBridgeInfo", test_l1_bridge_util_hal_negative3_updateBridgeInfo);
+    UT_add_test( pSuite, "l1_bridge_util_hal_negative4_updateBridgeInfo", test_l1_bridge_util_hal_negative4_updateBridgeInfo);
+    UT_add_test( pSuite, "l1_bridge_util_hal_positive1_checkIfExists", test_l1_bridge_util_hal_positive1_checkIfExists);
+    UT_add_test( pSuite, "l1_bridge_util_hal_negative1_checkIfExists", test_l1_bridge_util_hal_negative1_checkIfExists);
+    UT_add_test( pSuite, "l1_bridge_util_hal_negative2_checkIfExists", test_l1_bridge_util_hal_negative2_checkIfExists);
+    UT_add_test( pSuite, "l1_bridge_util_hal_negative3_checkIfExists", test_l1_bridge_util_hal_negative3_checkIfExists);
+    UT_add_test( pSuite, "l1_bridge_util_hal_positive1_checkIfExistsInBridge", test_l1_bridge_util_hal_positive1_checkIfExistsInBridge);
+    UT_add_test( pSuite, "l1_bridge_util_hal_negative1_checkIfExistsInBridge", test_l1_bridge_util_hal_negative1_checkIfExistsInBridge);
+    UT_add_test( pSuite, "l1_bridge_util_hal_negative2_checkIfExistsInBridge", test_l1_bridge_util_hal_negative2_checkIfExistsInBridge);
+    UT_add_test( pSuite, "l1_bridge_util_hal_negative3_checkIfExistsInBridge", test_l1_bridge_util_hal_negative3_checkIfExistsInBridge);
+    UT_add_test( pSuite, "l1_bridge_util_hal_negative4_checkIfExistsInBridge", test_l1_bridge_util_hal_negative4_checkIfExistsInBridge);
+    UT_add_test( pSuite, "l1_bridge_util_hal_negative5_checkIfExistsInBridge", test_l1_bridge_util_hal_negative5_checkIfExistsInBridge);
+    UT_add_test( pSuite, "l1_bridge_util_hal_positive1_HandlePreConfigVendor", test_l1_bridge_util_hal_positive1_HandlePreConfigVendor);
+    UT_add_test( pSuite, "l1_bridge_util_hal_negative1_HandlePreConfigVendor", test_l1_bridge_util_hal_negative1_HandlePreConfigVendor);
+    UT_add_test( pSuite, "l1_bridge_util_hal_negative2_HandlePreConfigVendor", test_l1_bridge_util_hal_negative2_HandlePreConfigVendor);
+    UT_add_test( pSuite, "l1_bridge_util_hal_negative3_HandlePreConfigVendor", test_l1_bridge_util_hal_negative3_HandlePreConfigVendor);
+    UT_add_test( pSuite, "l1_bridge_util_hal_negative4_HandlePreConfigVendor", test_l1_bridge_util_hal_negative4_HandlePreConfigVendor);
+    UT_add_test( pSuite, "l1_bridge_util_hal_positive1_HandlePostConfigVendor", test_l1_bridge_util_hal_positive1_HandlePostConfigVendor);
+    UT_add_test( pSuite, "l1_bridge_util_hal_negative1_HandlePostConfigVendor", test_l1_bridge_util_hal_negative1_HandlePostConfigVendor);
+    UT_add_test( pSuite, "l1_bridge_util_hal_negative2_HandlePostConfigVendor", test_l1_bridge_util_hal_negative2_HandlePostConfigVendor);
+    UT_add_test( pSuite, "l1_bridge_util_hal_negative3_HandlePostConfigVendor", test_l1_bridge_util_hal_negative3_HandlePostConfigVendor);
+    UT_add_test( pSuite, "l1_bridge_util_hal_negative4_HandlePostConfigVendor", test_l1_bridge_util_hal_negative4_HandlePostConfigVendor);
+    UT_add_test( pSuite, "l1_bridge_util_hal_positive1_getVendorIfaces", test_l1_bridge_util_hal_positive1_getVendorIfaces);
+    UT_add_test( pSuite, "l1_bridge_util_hal_positive1_removeIfaceFromList", test_l1_bridge_util_hal_positive1_removeIfaceFromList);
+    UT_add_test( pSuite, "l1_bridge_util_hal_negative1_removeIfaceFromList", test_l1_bridge_util_hal_negative1_removeIfaceFromList);
+    UT_add_test( pSuite, "l1_bridge_util_hal_negative2_removeIfaceFromList", test_l1_bridge_util_hal_negative2_removeIfaceFromList);
+    UT_add_test( pSuite, "l1_bridge_util_hal_negative3_removeIfaceFromList", test_l1_bridge_util_hal_negative3_removeIfaceFromList);
+    UT_add_test( pSuite, "l1_bridge_util_hal_negative4_removeIfaceFromList", test_l1_bridge_util_hal_negative4_removeIfaceFromList);
+    UT_add_test( pSuite, "l1_bridge_util_hal_negative5_removeIfaceFromList", test_l1_bridge_util_hal_negative5_removeIfaceFromList);
+
     return 0;
 }
