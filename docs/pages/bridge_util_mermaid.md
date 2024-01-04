@@ -3,70 +3,94 @@ Please find the mermaid flow of Bridge Util L2 Test cases:
 ### Test Function Name : test_l2_bridge_util_hal_updateAndCheckInBridge_IF_VLAN_Type
 
 ```mermaid
-graph TB
-A[Start] --> B[Create a bridge using updateBridgeInfo]
-B --> C[Create an interface to the same bridge using updateBridgeInfo]
-C --> D[Call checkIfExistsInBridge api for the created interface and bridge]
-D --> |Returns 0| E[Delete the interface on the same bridge using updateBridgeInfo]
-E --> F[Call checkIfExistsInBridge for the deleted interface and bridge]
-F --> |Returns -1| G[Delete the bridge using updateBridgeInfo]
-G --> H[End]
+flowchart TD
+A[Start] --> B[Create bridge 'brlan100' with updateBridgeInfo]
+B -- Success --> C[Create interface 'link100' on 'brlan100' with updateBridgeInfo]
+B -- Failure --> F[Test Case Fail at Step 1: Bridge Creation]
+C -- Success --> D[Call checkIfExistsInBridge for 'link100' in 'brlan100']
+C -- Failure --> G[Test Case Fail at Step 2: Interface Creation]
+D -- Returns 0 --> E[Delete interface 'link100' on 'brlan100' with updateBridgeInfo]
+D -- Does not return 0 --> H[Test Case Fail at Step 3: Check Interface Existence]
+E -- Success --> I[Call checkIfExistsInBridge for 'link100' in 'brlan100']
+E -- Failure --> J[Test Case Fail at Step 4: Interface Deletion]
+I -- Returns -1 --> K[Delete bridge 'brlan100' with updateBridgeInfo]
+I -- Does not return -1 --> L[Test Case Fail at Step 5: Check Interface Deletion]
+K -- Success --> M[End]
+K -- Failure --> N[Test Case Fail at Step 6: Bridge Deletion]
 ```
 
 ### Test Function Name : test_l2_bridge_util_hal_updateAndCheckInBridge_IF_WIFI_Type
 
 ```mermaid
-graph TB
-A[Start] --> B(Create bridgeDetails using updateBridgeInfo with bridgeName, Opr, type)
-B --> C(Create interface to the bridge using updateBridgeInfo with WiFiIfList, ifNameToBeUpdated, Opr, type)
-C --> D[Call checkIfExistsInBridge with iface_name, bridge_name]
-D -- If returns 0 --> E(Delete interface on the bridge using updateBridgeInfo with WiFiIfList, ifNameToBeUpdated, Opr, type)
-E --> F[Call checkIfExistsInBridge with iface_name, bridge_name]
-F -- If returns -1 --> G(Delete the bridge using updateBridgeInfo with bridgeName, ifNameToBeUpdated, Opr, type)
-G --> H[End]
+flowchart TD
+A[Start] --> B[Create bridge 'brlan100']
+B -- Success --> C["Create WiFi interface with WiFiIfList {wifi100, wifi101, wifi102}"]
+B -- Failure --> F[Test Case Fail at Step 1: Bridge Creation]
+C -- Success --> D[Check if 'wifi100' exists in 'brlan100']
+C -- Failure --> G[Test Case Fail at Step 2: WiFi Interface Creation]
+D -- Returns 0 --> E["Delete WiFi interface with WiFiIfList {wifi100, wifi101, wifi102}"]
+D -- Does not return 0 --> H[Test Case Fail at Step 3: Check WiFi Interface Existence]
+E -- Success --> I[Check if 'wifi100' does not exist in 'brlan100']
+E -- Failure --> J[Test Case Fail at Step 4: WiFi Interface Deletion]
+I -- Returns -1 --> K[Delete bridge 'brlan100']
+I -- Does not return -1 --> L[Test Case Fail at Step 5: Check WiFi Interface Deletion]
+K -- Success --> M[End]
+K -- Failure --> N[Test Case Fail at Step 6: Bridge Deletion]
 ```
 
 ### Test Function Name : test_l2_bridge_util_hal_updateAndCheckInBridge_IF_MOCA_Type
 
 ```mermaid
-graph TB
-start[start] --> step1[Create Bridge using updateBridgeInfo]
-step1 --> step2[Create moca interface on bridge using updateBridgeInfo]
-step2 --> cond1{moca100 exists \n on bridge?}
-cond1 --Yes--> step4[Delete moca interfaces using updateBridgeInfo]
-cond1 --No -->Step8[End]
-step4 --> cond2{moca100 exists \n on bridge?}
-cond2 --No --> step6[Delete bridge using updateBridgeInfo]
-cond2 -- Yes --> Step9[End]
-step6 --> step7[End]
+flowchart TD
+A[Start] --> B[Create bridge 'brlan100']
+B -- Success --> C["Create MoCA interface with MoCAIfList {moca100, moca101, moca102}"]
+B -- Failure --> F[Test Case Fail at Step 1: Bridge Creation]
+C -- Success --> D[Check if 'moca100' exists in 'brlan100']
+C -- Failure --> G[Test Case Fail at Step 2: MoCA Interface Creation]
+D -- Returns 0 --> E["Delete MoCA interface with MoCAIfList {moca100, moca101, moca102}"]
+D -- Does not return 0 --> H[Test Case Fail at Step 3: Check MoCA Interface Existence]
+E -- Success --> I[Check if 'moca100' does not exist in 'brlan100']
+E -- Failure --> J[Test Case Fail at Step 4: MoCA Interface Deletion]
+I -- Returns -1 --> K[Delete bridge 'brlan100']
+I -- Does not return -1 --> L[Test Case Fail at Step 5: Check MoCA Interface Deletion]
+K -- Success --> M[End]
+K -- Failure --> N[Test Case Fail at Step 6: Bridge Deletion]
 ```
 
 ### Test Function Name : test_l2_bridge_util_hal_updateAndCheckInBridge_IF_GRE_Type
 
 ```mermaid
-graph TD
-A["Create bridgeDetails structure using updateBridgeInfo with brlan100"]
-B["Create an interface to same bridge using updateBridgeInfo with GreIfList as {gre100, gre101, gre102}" ]
-C["Call checkIfExistsInBridge api with iface_name as gre100 and bridge_name as brlan100"]
-D["Delete the interface on same bridge using updateBridgeInfo "]
-E["Call checkIfExistsInBridge api with iface_name as gre100"]
-F["Delete the bridge using updateBridgeInfo"]
-A --> B
-B --returns 0 --> C
-C --> D
-D --> E
-E --returns -1 --> F
+flowchart TD
+A[Start] --> B[Create bridge 'brlan100']
+B -- Success --> C["Create GRE interface with GreIfList {gre100, gre101, gre102}"]
+B -- Failure --> F[Test Case Fail at Step 1: Bridge Creation]
+C -- Success --> D[Check if 'gre100' exists in 'brlan100']
+C -- Failure --> G[Test Case Fail at Step 2: GRE Interface Creation]
+D -- Returns 0 --> E["Delete GRE interface with GreIfList {gre100, gre101, gre102}"]
+D -- Does not return 0 --> H[Test Case Fail at Step 3: Check GRE Interface Existence]
+E -- Success --> I[Check if 'gre100' does not exist in 'brlan100']
+E -- Failure --> J[Test Case Fail at Step 4: GRE Interface Deletion]
+I -- Returns -1 --> K[Delete bridge 'brlan100']
+I -- Does not return -1 --> L[Test Case Fail at Step 5: Check GRE Interface Deletion]
+K -- Success --> M[End]
+K -- Failure --> N[Test Case Fail at Step 6: Bridge Deletion]
 ```
 
 ### Test Function Name : test_l2_bridge_util_hal_updateAndCheckInBridge_IF_ETH_Type
 
 ```mermaid
-graph TD
-A[Start] --> B[bridgeDetails structure creation using updateBridgeInfo]
-B --> C["Create interface to bridge using updateBridgeInfo with EthIfList"]
-C --> D["Call checkIfExistsInBridge with eth100, brlan100"]
-D --> |"Returns 0"| E["Delete the eth100 interface using updateBridgeInfo"]
-E --> F["Call checkIfExistsInBridge with eth100, brlan100"]
-F --> |"Returns -1"| G["Delete the bridge using updateBridgeInfo"]
-G --> H[End]
+flowchart TD
+A[Start] --> B[Create bridge 'brlan100']
+B -- Success --> C["Create eth interface with ethIfList {eth100, eth101, eth102}"]
+B -- Failure --> F[Test Case Fail at Step 1: Bridge Creation]
+C -- Success --> D[Check if 'eth100' exists in 'brlan100']
+C -- Failure --> G[Test Case Fail at Step 2: eth Interface Creation]
+D -- Returns 0 --> E["Delete eth interface with ethIfList {eth100, eth101, eth102}"]
+D -- Does not return 0 --> H[Test Case Fail at Step 3: Check eth Interface Existence]
+E -- Success --> I[Check if 'eth100' does not exist in 'brlan100']
+E -- Failure --> J[Test Case Fail at Step 4: eth Interface Deletion]
+I -- Returns -1 --> K[Delete bridge 'brlan100']
+I -- Does not return -1 --> L[Test Case Fail at Step 5: Check eth Interface Deletion]
+K -- Success --> M[End]
+K -- Failure --> N[Test Case Fail at Step 6: Bridge Deletion]
 ```
