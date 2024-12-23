@@ -30,15 +30,15 @@ XCFLAGS := -DNDEBUG
 
 TARGET_EXEC := bridgeutil_hal_test
 
+BUILD_WEAK_STUBS_SRC = $(ROOT_DIR)/skeletons/src
+
 ifeq ($(TARGET),)
 $(info TARGET NOT SET)
 $(info TARGET FORCED TO Linux)
 TARGET = linux
 CFLAGS += -DBUILD_LINUX
-SRC_DIRS += $(ROOT_DIR)/skeletons/src
 endif
 
-BUILD_WEAK_STUBS_SRC = $(ROOT_DIR)/skeletons/src
 
 $(info TARGET [$(TARGET)])
 
@@ -75,4 +75,5 @@ list:
 clean:
 	@echo UT [$@]
 	make -C ./ut-core cleanall
+
 
