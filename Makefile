@@ -17,43 +17,37 @@
 # * limitations under the License.
 # *
 
-ROOT_DIR:=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
+ROOT_DIR := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 BIN_DIR := $(ROOT_DIR)/bin
 TOP_DIR := $(ROOT_DIR)
-
 SRC_DIRS = $(ROOT_DIR)/src
 INC_DIRS := $(ROOT_DIR)/../include
 HAL_LIB_DIR := $(ROOT_DIR)/libs
+
+HAL_LIB := bridge_utils
 
 XCFLAGS := -DNDEBUG
 
 TARGET_EXEC := bridgeutil_hal_test
 
-ENABLE_RDKBHAL_TEST ?= 0
-$(info ENABLE_RDKBHAL_TEST is set to [$(ENABLE_RDKBHAL_TEST)])
-
 ifeq ($(TARGET),)
-$(info TARGET NOT SET )
+$(info TARGET NOT SET)
 $(info TARGET FORCED TO Linux)
-TARGET=linux
-CFLAGS = -DBUILD_LINUX
-CFLAGS += -DENABLE_RDKBHAL_TEST
-SRC_DIRS += $(ROOT_DIR)/skeletons/src
-HAL_LIB_DIR := $(ROOT_DIR)/libs
+TARGET = linux
+CFLAGS += -DBUILD_LINUX
 endif
+
+BUILD_WEAK_STUBS_SRC = $(ROOT_DIR)/skeletons/src
 
 $(info TARGET [$(TARGET)])
 
 ifeq ($(TARGET),arm)
-ifeq ($(ENABLE_RDKBHAL_TEST), 1)
-	CFLAGS += -DENABLE_RDKBHAL_TEST
-	YLDFLAGS = -Wl,-rpath,$(HAL_LIB_DIR) -L$(HAL_LIB_DIR) -lbridge_utils -lbridgeutils
-else
-	YLDFLAGS = -Wl,-rpath,$(HAL_LIB_DIR) -L$(HAL_LIB_DIR) -lbridge_utils
-endif
+YLDFLAGS = -Wl,-rpath,$(HAL_LIB_DIR) -L$(HAL_LIB_DIR) -l$(HAL_LIB)
 endif
 
+
 .PHONY: clean list all
+
 
 export YLDFLAGS
 export BIN_DIR
@@ -65,10 +59,11 @@ export HAL_LIB_DIR
 export XCFLAGS
 export CFLAGS
 export TARGET_EXEC
+export BUILD_WEAK_STUBS_SRC
 
 .PHONY: clean list build
 
-build:
+build: 
 	@echo UT [$@]
 	make -C ./ut-core
 
@@ -79,3 +74,4 @@ list:
 clean:
 	@echo UT [$@]
 	make -C ./ut-core cleanall
+

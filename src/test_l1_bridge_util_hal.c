@@ -72,7 +72,6 @@ int fetch_bridge_util_details(void)
 
     return 0;
 }
-#ifdef ENABLE_RDKBHAL_TEST
 /**
  * @brief Unit test for the updateBridgeInfo function in the l1_bridge_util_hal_positive1 module.
  *
@@ -599,13 +598,10 @@ void test_l1_bridge_util_hal_positive1_checkIfExistsInBridge(void)
     UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     int result = 0;
-
     char iface_name[64];
-
-    strcpy(iface_name, ifaceName);
-
     char bridge_name[64];
 
+    strcpy(iface_name, ifaceName);
     strcpy(bridge_name, br_Name);
 
     UT_LOG_DEBUG("Invoking checkIfExistsInBridge with valid interface name: %s and bridge name : %s", iface_name, bridge_name);
@@ -766,7 +762,6 @@ void test_l1_bridge_util_hal_negative5_checkIfExistsInBridge(void)
 
     UT_LOG_INFO("Out %s\n", __FUNCTION__);
 }
-#endif
 /**
  * @brief Test the positive scenario of the HandlePreConfigVendor function.
  *
@@ -1267,7 +1262,6 @@ void test_l1_bridge_util_hal_positive1_getVendorIfaces(void)
     UT_PASS("getVendorIfaces validation success");
     UT_LOG_INFO("Out %s\n", __FUNCTION__);
 }
-#ifdef ENABLE_RDKBHAL_TEST
 /**
  * @brief This test case tests the functionality of the removeIfaceFromList() function.
  *
@@ -1456,7 +1450,6 @@ void test_l1_bridge_util_hal_negative4_removeIfaceFromList(void)
 
     UT_LOG_INFO("Out %s\n", __FUNCTION__);
 }
-#endif
 
 static UT_test_suite_t *pSuite = NULL;
 
@@ -1473,7 +1466,6 @@ int test_bridge_util_hal_l1_register(void)
     {
         return -1;
     }
-#ifdef ENABLE_RDKBHAL_TEST
     UT_add_test(pSuite, "l1_bridge_util_hal_positive1_updateBridgeInfo", test_l1_bridge_util_hal_positive1_updateBridgeInfo);
     UT_add_test(pSuite, "l1_bridge_util_hal_positive2_updateBridgeInfo", test_l1_bridge_util_hal_positive2_updateBridgeInfo);
     UT_add_test(pSuite, "l1_bridge_util_hal_positive3_updateBridgeInfo", test_l1_bridge_util_hal_positive3_updateBridgeInfo);
@@ -1490,7 +1482,6 @@ int test_bridge_util_hal_l1_register(void)
     UT_add_test(pSuite, "l1_bridge_util_hal_negative2_checkIfExistsInBridge", test_l1_bridge_util_hal_negative2_checkIfExistsInBridge);
     UT_add_test(pSuite, "l1_bridge_util_hal_negative3_checkIfExistsInBridge", test_l1_bridge_util_hal_negative3_checkIfExistsInBridge);
     UT_add_test(pSuite, "l1_bridge_util_hal_negative5_checkIfExistsInBridge", test_l1_bridge_util_hal_negative5_checkIfExistsInBridge);
-#endif
     UT_add_test(pSuite, "l1_bridge_util_hal_positive1_HandlePreConfigVendor", test_l1_bridge_util_hal_positive1_HandlePreConfigVendor);
     UT_add_test(pSuite, "l1_bridge_util_hal_negative1_HandlePreConfigVendor", test_l1_bridge_util_hal_negative1_HandlePreConfigVendor);
     UT_add_test(pSuite, "l1_bridge_util_hal_negative2_HandlePreConfigVendor", test_l1_bridge_util_hal_negative2_HandlePreConfigVendor);
@@ -1502,12 +1493,10 @@ int test_bridge_util_hal_l1_register(void)
     UT_add_test(pSuite, "l1_bridge_util_hal_negative3_HandlePostConfigVendor", test_l1_bridge_util_hal_negative3_HandlePostConfigVendor);
     UT_add_test(pSuite, "l1_bridge_util_hal_negative4_HandlePostConfigVendor", test_l1_bridge_util_hal_negative4_HandlePostConfigVendor);
     UT_add_test(pSuite, "l1_bridge_util_hal_positive1_getVendorIfaces", test_l1_bridge_util_hal_positive1_getVendorIfaces);
-#ifdef ENABLE_RDKBHAL_TEST
     UT_add_test(pSuite, "l1_bridge_util_hal_positive1_removeIfaceFromList", test_l1_bridge_util_hal_positive1_removeIfaceFromList);
     UT_add_test(pSuite, "l1_bridge_util_hal_negative1_removeIfaceFromList", test_l1_bridge_util_hal_negative1_removeIfaceFromList);
     UT_add_test(pSuite, "l1_bridge_util_hal_negative2_removeIfaceFromList", test_l1_bridge_util_hal_negative2_removeIfaceFromList);
     UT_add_test(pSuite, "l1_bridge_util_hal_negative3_removeIfaceFromList", test_l1_bridge_util_hal_negative3_removeIfaceFromList);
     UT_add_test(pSuite, "l1_bridge_util_hal_negative4_removeIfaceFromList", test_l1_bridge_util_hal_negative4_removeIfaceFromList);
-#endif
     return 0;
 }

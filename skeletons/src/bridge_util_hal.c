@@ -20,9 +20,7 @@
 #include <setjmp.h>
 #include "bridge_util_hal.h"
 
-#ifdef ENABLE_RDKBHAL_TEST
-
-int updateBridgeInfo(bridgeDetails *bridgeInfo, char *ifNameToBeUpdated, int Opr, int type)
+int __attribute__((weak)) updateBridgeInfo(bridgeDetails *bridgeInfo, char *ifNameToBeUpdated, int Opr, int type)
 {
   /*TODO: Implement Me!*/
   (void)bridgeInfo;
@@ -32,30 +30,29 @@ int updateBridgeInfo(bridgeDetails *bridgeInfo, char *ifNameToBeUpdated, int Opr
   return (int)0;
 }
 
-int checkIfExists(char *iface_name)
+int __attribute__((weak)) checkIfExists(char *iface_name)
 {
   /*TODO: Implement Me!*/
   (void)iface_name;
   return (int)0;
 }
 
-void removeIfaceFromList(char *str, const char *sub)
+void __attribute__((weak)) removeIfaceFromList(char *str, const char *sub)
 {
   /*TODO: Implement Me!*/
   (void)str;
   (void)sub;
 }
 
-int checkIfExistsInBridge(char *iface_name, char *bridge_name)
+int __attribute__((weak)) checkIfExistsInBridge(char *iface_name, char *bridge_name)
 {
   /*TODO: Implement Me!*/
   (void)iface_name;
   (void)bridge_name;
   return (int)0;
 }
-#endif
 
-int HandlePreConfigVendor(bridgeDetails *bridgeInfo, int InstanceNumber)
+int __attribute__((weak)) HandlePreConfigVendor(bridgeDetails *bridgeInfo, int InstanceNumber)
 {
   /*TODO: Implement Me!*/
   (void)bridgeInfo;
@@ -63,7 +60,7 @@ int HandlePreConfigVendor(bridgeDetails *bridgeInfo, int InstanceNumber)
   return (int)0;
 }
 
-int HandlePostConfigVendor(bridgeDetails *bridgeInfo, int Config)
+int __attribute__((weak)) HandlePostConfigVendor(bridgeDetails *bridgeInfo, int Config)
 {
   /*TODO: Implement Me!*/
   (void)bridgeInfo;
@@ -71,7 +68,7 @@ int HandlePostConfigVendor(bridgeDetails *bridgeInfo, int Config)
   return (int)0;
 }
 
-char *getVendorIfaces(void)
+char __attribute__((weak)) * getVendorIfaces(void)
 {
   /*TODO: Implement Me!*/
   return (char *)0;
