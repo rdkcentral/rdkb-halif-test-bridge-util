@@ -20,6 +20,20 @@
 #include <setjmp.h>
 #include "bridge_util_hal.h"
 
+__attribute__((weak)) int DeviceMode = 0;
+__attribute__((weak)) int need_wifi_gw_refresh = 0;
+__attribute__((weak)) int need_switch_gw_refresh = 0;
+__attribute__((weak)) int syncMembers = 0;
+__attribute__((weak)) int BridgeOprInPropgress = 0;
+__attribute__((weak)) FILE *logFp = NULL;
+__attribute__((weak)) char log_buff[MAX_LOG_BUFF_SIZE] = {0};
+__attribute__((weak)) char log_msg_wtime[MAX_LOG_BUFF_SIZE + TIMESTAMP] = {0};
+__attribute__((weak)) char primaryBridgeName[64] = {0};
+__attribute__((weak)) int ethWanEnabled = 0;
+__attribute__((weak)) char ethWanIfaceName[64] = "eth0";
+__attribute__((weak)) struct tm *timeinfo = NULL;
+__attribute__((weak)) time_t utc_time = 0;
+
 int __attribute__((weak)) updateBridgeInfo(bridgeDetails *bridgeInfo, char *ifNameToBeUpdated, int Opr, int type)
 {
   /*TODO: Implement Me!*/
