@@ -39,7 +39,7 @@
 static int gTestGroup = 1;
 static int gTestID = 1;
 
-char ifaceName[64];
+char ifName[64];
 char br_Name[64];
 char iface_to_remove[64];
 char ifNameToBeUpdated[64];
@@ -55,7 +55,7 @@ bridgeDetails br_details;
 int fetch_bridge_util_details(void)
 {
     UT_KVP_PROFILE_GET_STRING("bridge_util/config/br_Name", br_Name);
-    UT_KVP_PROFILE_GET_STRING("bridge_util/config/ifaceName", ifaceName);
+    UT_KVP_PROFILE_GET_STRING("bridge_util/config/ifaceName", ifName);
     UT_KVP_PROFILE_GET_STRING("bridge_util/config/ifNameToBeUpdated", ifNameToBeUpdated);
     UT_KVP_PROFILE_GET_STRING("bridge_util/config/iface_to_remove", iface_to_remove);
 
@@ -462,7 +462,7 @@ void test_l1_bridge_util_hal_positive1_checkIfExists(void)
     int result = 0;
     char iface_name[64] = {"\0"};
 
-    strcpy(iface_name, ifaceName);
+    strcpy(iface_name, ifName);
 
     UT_LOG_DEBUG("Invoking checkIfExists with valid_interface : %s", iface_name);
     result = checkIfExists(iface_name);
@@ -601,7 +601,7 @@ void test_l1_bridge_util_hal_positive1_checkIfExistsInBridge(void)
     char iface_name[64];
     char bridge_name[64];
 
-    strcpy(iface_name, ifaceName);
+    strcpy(iface_name, ifName);
     strcpy(bridge_name, br_Name);
 
     UT_LOG_DEBUG("Invoking checkIfExistsInBridge with valid interface name: %s and bridge name : %s", iface_name, bridge_name);
@@ -638,7 +638,7 @@ void test_l1_bridge_util_hal_negative1_checkIfExistsInBridge(void)
     int result = 0;
     char iface_name[64];
 
-    strcpy(iface_name, ifaceName);
+    strcpy(iface_name, ifName);
 
     char bridge_name[64] = "ert34";
 
@@ -715,7 +715,7 @@ void test_l1_bridge_util_hal_negative3_checkIfExistsInBridge(void)
     int result = 0;
     char iface_name[64] = {"\0"};
 
-    strcpy(iface_name, ifaceName);
+    strcpy(iface_name, ifName);
     char *bridge_name = NULL;
 
     UT_LOG_DEBUG("Invoking checkIfExistsInBridge with valid interface : %s  and NULL bridge name", iface_name);
@@ -1290,7 +1290,7 @@ void test_l1_bridge_util_hal_positive1_removeIfaceFromList(void)
     strcpy(str, iface_to_remove);
     char sub[64] = {"\0"};
 
-    strcpy(sub, ifaceName);
+    strcpy(sub, ifName);
 
     UT_LOG_DEBUG("Invoking removeIfaceFromList() with valid interface name : %s and interface list : %s", sub, str);
     removeIfaceFromList(str, sub);
@@ -1370,7 +1370,7 @@ void test_l1_bridge_util_hal_negative2_removeIfaceFromList(void)
     char *str = NULL;
     char sub[64] = {"\0"};
 
-    strcpy(sub, ifaceName);
+    strcpy(sub, ifName);
 
     UT_LOG_DEBUG("Invoking removeIfaceFromList() with NULL Str");
     removeIfaceFromList(str, sub);
