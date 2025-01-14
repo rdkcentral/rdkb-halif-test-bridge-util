@@ -1,0 +1,20 @@
+# Temporary HAL configuration file defined for testing purposes only.
+# All the values stated are example or reference values which are vendor-specific.
+# The range of acceptable values for InstanceNumber is defined by "enum config" in hal spec. Provide int values corresponding to the values listed in "enum config"
+
+bridge_util:
+  config:
+    bridgeDetails:
+      bridgeName: "brlan0"
+      vlan_name: "vlan10"
+      VirtualParentIfname: "wan0"
+      vlanID: 10
+      ethIfList: "eth0"
+      MoCAIfList: "moca0"
+      GreIfList: "gre0"
+      WiFiIfList: "wlan0"
+    br_Name: "wlan0"
+    ifaceName: "br-home"
+    ifNameToBeUpdated: "wifi0"
+    iface_to_remove: "moca0"
+    InstanceNumber: 1
